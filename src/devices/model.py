@@ -1,7 +1,8 @@
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
 from sqlalchemy.orm import relationship, declarative_base
+
+from core.database import Base
 from ..drivers.model import drivers_devices
-Base = declarative_base()
 
 
 class Devices(Base):

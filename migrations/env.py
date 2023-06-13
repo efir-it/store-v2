@@ -7,21 +7,23 @@ from sqlalchemy import pool
 
 from alembic import context
 
-# setup(
-#     name='core',
-#     packages=find_packages(),
-# )
-#
-# sys.path.append(os.path.dirname(os.path.realpath(__file__)))
+sys.path.append(os.path.join(sys.path[0], 'src'))
 
-from core.database import SQLALCHEMY_DATABASE_URL
 
-from core.database import Base
+from core.database import Base, SQLALCHEMY_DATABASE_URL
+from core.config import DB_HOST, DB_NAME, DB_PASS, DB_PORT, DB_USER
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
 
+
+section = config.config_ini_section
+config.set_section_option(section, "DB_HOST", DB_HOST)
+config.set_section_option(section, "DB_PORT", DB_PORT)
+config.set_section_option(section, "DB_USER", DB_USER)
+config.set_section_option(section, "DB_NAME", DB_NAME)
+config.set_section_option(section, "DB_PASS", DB_PASS)
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
 if config.config_file_name is not None:
@@ -58,6 +60,7 @@ def run_migrations_offline() -> None:
         target_metadata=target_metadata,
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},
+
     )
 
     with context.begin_transaction():
@@ -71,10 +74,17 @@ def run_migrations_online() -> None:
     and associate a connection with the context.
 
     """
-    configuration = config.get_section(config.config_ini_section)
-    configuration['sqlalchemy.url'] = SQLALCHEMY_DATABASE_URL
+    # configuration = config.get_section(config.config_ini_section)
+    # configuration['sqlalchemy.url'] = SQLALCHEMY_DATABASE_URL
+    # connectable = engine_from_config(
+    #     configuration,
+    #     prefix="sqlalchemy.",
+    #     poolclass=pool.NullPool,
+    # )
+    # configuration = config.get_section(config.config_ini_section)
+    # configuration['sqlalchemy.url'] = SQLALCHEMY_DATABASE_URL
     connectable = engine_from_config(
-        configuration,
+        config.get_section(config.config_ini_section),
         prefix="sqlalchemy.",
         poolclass=pool.NullPool,
     )

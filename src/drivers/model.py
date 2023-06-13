@@ -1,29 +1,7 @@
-# from sqlalchemy import MetaData, Integer, String, Table, Column, Boolean, ForeignKey
-#
-# from sqlalchemy.orm import relationship
-#
-# metadata = MetaData()
-#
-# drivers = Table(
-#     "drivers",
-#     metadata,
-#     Column("id", Integer, primary_key=True, nullable=False),
-#     Column("name", String(200), nullable=False),
-#     Column("position_save", String(200)),
-#     Column("model_device", String(200)),
-#     Column('type_device_id', Integer, ForeignKey('type_device.id')),
-#
-# )
-#
-# drivers_devices = Table(
-#     Column("id", Integer, primary_key=True, nullable=False),
-#     Column('device_id', Integer, ForeignKey('devices.id')),
-#     Column('drivers_id', Integer, ForeignKey('drivers.id')),
-# )
 from sqlalchemy import Column, ForeignKey, Integer, String, Table
 from sqlalchemy.orm import relationship, declarative_base
 
-Base = declarative_base()
+from core.database import Base
 
 drivers_devices = Table(
     "drivers_devices",
@@ -49,7 +27,6 @@ class Driver(Base):
                            back_populates="devices"
                            )
 
-
 # class DriversDevices(Base):
 #     __tablename__ = 'drivers_devices'
 #     id = Column(Integer, primary_key=True, nullable=False)
@@ -57,4 +34,3 @@ class Driver(Base):
 #     driver_id = Column(Integer, ForeignKey('drivers.id'))
 
 #
-
