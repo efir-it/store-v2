@@ -1,26 +1,23 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
+from sqlalchemy.orm import Session
+import service as TypeDeviceServices
+from model import TypeDevice as TypeDeviceModel
 
-router = APIRouter(
-    prefix="/operations",
-    tags=["Operation"]
-)
+router = APIRouter()
 
 
 @router.get("/type_device/{id}")
-async def get_type_device(type_device_id: int):
+def get_type_device(type_device_id: int):
     pass
 
 
 @router.get("")
-async def get_type_device_list():
+def get_type_device_list():
     pass
 
 
-@router.post("")
-async def add_type_device(session):
-    type_device = ''
-    await session.execute(type_device)
-    await session.commit()
-    return {"status": "success"}
+@router.post('/', tags=['create_type_device'])
+def create_type_device(data, db: Session):
+    return TypeDeviceServices.create_type_device(data, db)
 
 
