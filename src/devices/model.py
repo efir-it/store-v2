@@ -1,8 +1,11 @@
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
-from sqlalchemy.orm import relationship, declarative_base
+from sqlalchemy.orm import relationship
+
 
 from core.database import Base
 from ..drivers.model import drivers_devices
+
+
 
 
 class Devices(Base):
@@ -15,7 +18,7 @@ class Devices(Base):
     drivers = relationship('drivers',
                            backref='devices',
                            secondary=drivers_devices,
-                           # back_populates="devices"
+
                            )
 
     rmk_id = Column(Integer, ForeignKey('rmk.id'))

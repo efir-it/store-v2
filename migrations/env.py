@@ -10,8 +10,9 @@ from alembic import context
 sys.path.append(os.path.join(sys.path[0], 'src'))
 
 
-from core.database import Base, SQLALCHEMY_DATABASE_URL
+from core.database import SQLALCHEMY_DATABASE_URL
 from core.config import DB_HOST, DB_NAME, DB_PASS, DB_PORT, DB_USER
+from core.base import Base
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

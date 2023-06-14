@@ -23,8 +23,7 @@ class Driver(Base):
     type_device = relationship('TypeDevice')
     devices = relationship('devices',
                            backref='driver',
-                           secondary=drivers_devices,
-                           back_populates="devices"
+                           secondary=drivers_devices
                            )
 
 # class DriversDevices(Base):
