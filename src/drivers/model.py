@@ -2,7 +2,7 @@ from sqlalchemy import Column, ForeignKey, Integer, String, Table
 from sqlalchemy.orm import relationship, declarative_base
 
 from core.database import Base
-
+# Base = declarative_base()
 drivers_devices = Table(
     "drivers_devices",
     Base.metadata,
@@ -17,14 +17,10 @@ class Driver(Base):
     name = Column(String(200), nullable=False)
     position_save = Column(String(200))
     model_device = Column(String(200))
+    devices = relationship('Devices', backref='driver')
 
-    type_device_id = Column(Integer, ForeignKey('type_device.id'))
-
-    type_device = relationship('TypeDevice')
-    devices = relationship('devices',
-                           backref='driver',
-                           secondary=drivers_devices
-                           )
+    class Config:
+        orm_mode = True
 
 # class DriversDevices(Base):
 #     __tablename__ = 'drivers_devices'

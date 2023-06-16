@@ -14,6 +14,9 @@ class QuantityProducts(Base):
     product = relationship("Product", back_populates="quantities")
     store = relationship("Store", back_populates="quantities")
 
+    class Config:
+        orm_mode = True
+
 
 class Product(Base):
     __tablename__ = 'product'
@@ -21,3 +24,6 @@ class Product(Base):
     id = Column(Integer, primary_key=True, nullable=False)
     name = Column(String(255), nullable=False)
     quantities = relationship("QuantityProducts", back_populates="product")
+
+    class Config:
+        orm_mode = True

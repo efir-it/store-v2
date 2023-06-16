@@ -1,11 +1,8 @@
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
-from sqlalchemy.orm import relationship
-
+from sqlalchemy.orm import relationship, declarative_base
 
 from core.database import Base
-from ..drivers.model import drivers_devices
-
-
+# Base = declarative_base()
 
 
 class Devices(Base):
@@ -15,12 +12,10 @@ class Devices(Base):
     name = Column(String(200), nullable=False)
     hide = Column(Boolean)
 
-    drivers = relationship('drivers',
-                           backref='devices',
-                           secondary=drivers_devices,
-
-                           )
+    drivers = relationship('drivers')
 
     rmk_id = Column(Integer, ForeignKey('rmk.id'))
-
     type_device_id = Column(Integer, ForeignKey('type_device.id'))
+
+    class Config:
+        orm_mode = True

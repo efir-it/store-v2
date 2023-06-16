@@ -10,3 +10,6 @@ class Store(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String(100), nullable=False)
     rmk = relationship('Rmk', back_populates='store')
+
+    class Config:
+        orm_mode = True

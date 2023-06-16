@@ -12,3 +12,6 @@ class Rmk(Base):
     store_id = Column(Integer, ForeignKey('store.id'), nullable=False)
     store = relationship('Store', back_populates='rmk')
     devices = relationship('Devices')
+
+    class Config:
+        orm_mode = True

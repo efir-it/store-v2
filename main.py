@@ -1,12 +1,13 @@
 from typing import Union
 
 import uvicorn
-
-from src.type_device.route import router as type_devise_router
+from src.type_device import router as type_device
+from src.devices import router as devices
 from fastapi import FastAPI
 
 app = FastAPI()
-app.include_router(type_devise_router, prefix='/type_device')
+app.include_router(type_device.router, prefix="/type_device", tags=["type_device"])
+app.include_router(devices.router, prefix="/devices", tags=["devices"])
 
 
 if __name__ == '__main__':
