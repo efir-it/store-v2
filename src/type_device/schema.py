@@ -11,7 +11,7 @@ class TypeDeviceCreate(TypeDeviceBase):
 
 
 class TypeDeviceUpdate(TypeDeviceBase):
-    ...
+    name: str
 
 
 class TypeDevice(TypeDeviceBase):

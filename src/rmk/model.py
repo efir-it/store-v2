@@ -9,9 +9,6 @@ class Rmk(Base):
 
     id = Column(Integer, primary_key=True)
     name = Column(String(100), nullable=False)
-    store_id = Column(Integer, ForeignKey('store.id'), nullable=False)
-    store = relationship('Store', back_populates='rmk')
-    devices = relationship('Devices')
 
     class Config:
         orm_mode = True

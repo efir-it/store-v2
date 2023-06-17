@@ -2,6 +2,7 @@ from sqlalchemy import Column, ForeignKey, Integer, String, Table
 from sqlalchemy.orm import relationship, declarative_base
 
 from core.database import Base
+
 # Base = declarative_base()
 drivers_devices = Table(
     "drivers_devices",

@@ -16,7 +16,7 @@ def read_devices(db: Session = Depends(get_db_session)):
     return devices
 
 
-@router.get("/devices/{id}", response_model=Devices)
+@router.get("/{id}", response_model=Devices)
 def read_device(id: int, db: Session = Depends(get_db_session)):
     device = DevicesService(db).get_device(id)
     if not device:
@@ -24,12 +24,12 @@ def read_device(id: int, db: Session = Depends(get_db_session)):
     return device
 
 
-@router.post("/devices", response_model=Devices)
+@router.post("/", response_model=Devices)
 def create_device(device: DevicesCreate, db: Session = Depends(get_db_session)):
     return DevicesService(db).create_device(device)
 
 
-@router.put("/devices/{id}", response_model=Devices)
+@router.put("/{id}", response_model=Devices)
 def update_device(id: int, device: DevicesUpdate, db: Session = Depends(get_db_session)):
     updated_device = DevicesService(db).update_device(id, device)
     if not updated_device:
@@ -37,7 +37,7 @@ def update_device(id: int, device: DevicesUpdate, db: Session = Depends(get_db_s
     return updated_device
 
 
-@router.delete("/devices/{id}", response_model=Devices)
+@router.delete("/{id}", response_model=Devices)
 def delete_device(id: int, db: Session = Depends(get_db_session)):
     deleted_device = DevicesService(db).delete_device(id)
     if not deleted_device:
