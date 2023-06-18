@@ -8,7 +8,4 @@ class Rmk(Base):
     __tablename__ = 'rmk'
 
     id = Column(Integer, primary_key=True)
-    name = Column(String(100), nullable=False)
-
-    class Config:
-        orm_mode = True
+    name = Column(String(100), nullable=False, unique=True)
