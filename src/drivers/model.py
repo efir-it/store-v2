@@ -23,10 +23,3 @@ class Driver(Base):
     class Config:
         orm_mode = True
 
-# class DriversDevices(Base):
-#     __tablename__ = 'drivers_devices'
-#     id = Column(Integer, primary_key=True, nullable=False)
-#     device_id = Column(Integer, ForeignKey('devices.id'))
-#     driver_id = Column(Integer, ForeignKey('drivers.id'))
-
-#

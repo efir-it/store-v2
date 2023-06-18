@@ -5,5 +5,5 @@ class Store(BaseModel):
     name = str
     address = str
     separated = bool
-    hide = bool = True
+    rmk_id: int
 

@@ -3,43 +3,43 @@ from typing import List
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from .services import DevicesService
+from .services import StoreService
 from core.database import get_db_session
-from .schema import Devices, DevicesCreate, DevicesUpdate
+from .schema import Store
 
 router = APIRouter()
 
 
-@router.get("/", response_model=List[Devices])
+@router.get("/", response_model=List[Store])
 def read_devices(db: Session = Depends(get_db_session)):
-    devices = DevicesService(db).get_devices()
+    devices = StoreService(db).get_store_all()
     return devices
 
 
-@router.get("/{id}", response_model=Devices)
+@router.get("/{id}", response_model=Store)
 def read_device(id: int, db: Session = Depends(get_db_session)):
-    device = DevicesService(db).get_device(id)
+    device = StoreService(db).get_store_one(id)
     if not device:
         raise HTTPException(status_code=404, detail="Device not found")
     return device
 
 
-@router.post("/", response_model=Devices)
-def create_device(device: DevicesCreate, db: Session = Depends(get_db_session)):
-    return DevicesService(db).create_device(device)
+@router.post("/", response_model=Store)
+def create_device(device: Store, db: Session = Depends(get_db_session)):
+    return StoreService(db).get_store_create(device)
 
 
-@router.put("/{id}", response_model=Devices)
-def update_device(id: int, device: DevicesUpdate, db: Session = Depends(get_db_session)):
-    updated_device = DevicesService(db).update_device(id, device)
-    if not updated_device:
+@router.put("/{id}", response_model=Store)
+def update_device(id: int, store: Store, db: Session = Depends(get_db_session)):
+    store = StoreService(db).get_store_update(id, store)
+    if not store:
         raise HTTPException(status_code=404, detail="Device not found")
-    return updated_device
+    return store
 
 
-@router.delete("/{id}", response_model=Devices)
+@router.delete("/{id}", response_model=Store)
 def delete_device(id: int, db: Session = Depends(get_db_session)):
-    deleted_device = DevicesService(db).delete_device(id)
-    if not deleted_device:
+    store = StoreService(db).get_store_delete(id)
+    if not store:
         raise HTTPException(status_code=404, detail="Device not found")
-    return deleted_device
+    return store
