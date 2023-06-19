@@ -13,26 +13,26 @@ class StoreService:
     def get_store_all(self):
         return self.db.query(model.Store).all()
 
-    def get_store_create(self, data: schema.Store):
-        store = model.Store(name=data.name, address=data.address, separated=data.separated, rmk_id=data.rmk_id)
+    def store_create(self, data: schema.Store) -> schema.Store:
+        store = model.Store(name=data.name, address=data.address, separated=data.separated)
         self.db.add(store)
         self.db.commit()
         self.db.refresh(store)
-        return store
+        return schema.Store.from_orm(store)
 
-    def get_store_update(self, product_id: int, data: schema.Store):
+    def store_update(self, product_id: int, data: schema.Store):
         store = self.get_store_one(product_id)
         if not store:
             return None
 
-        for key, value in store.items():
+        for key, value in data.__dict__.items():
             setattr(store, key, value)
 
         self.db.commit()
         self.db.refresh(store)
         return store
 
-    def get_store_delete(self, product_id: int):
+    def store_delete(self, product_id: int):
         store = self.get_store_one(product_id)
 
         if not store:

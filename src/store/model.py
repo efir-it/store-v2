@@ -1,5 +1,5 @@
-from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
-from sqlalchemy.orm import relationship, declarative_base
+from sqlalchemy import Column, Integer, String, Boolean
+from sqlalchemy.orm import relationship
 
 from core.database import Base
 
@@ -7,13 +7,10 @@ from core.database import Base
 class Store(Base):
     __tablename__ = 'store'
 
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, unique=True, nullable=False)
     name = Column(String(100), nullable=False)
     address = Column(String(300), nullable=False)
-    separated = Column(Boolean)
+    separated = Column(Boolean, default=True)
 
-    rmk_id = Column(Integer, ForeignKey('rmk.id'))
-    rmk = relationship('Rmk', back_populates='store')
+    quantity_products = relationship("QuantityProducts", back_populates="store")
 
-    class Config:
-        orm_mode = True
