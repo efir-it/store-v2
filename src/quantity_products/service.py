@@ -7,8 +7,8 @@ class QuantityProductsService:
     def __init__(self, db: Session):
         self.db = db
 
-    def get_quantity_product_one(self, product: int):
-        return self.db.query(model.QuantityProducts).filter(model.QuantityProducts.product == product).first()
+    def get_quantity_product_one(self, id: int):
+        return self.db.query(model.QuantityProducts).filter(model.QuantityProducts.id == id).first()
 
     def get_quantity_product_all(self):
         return self.db.query(model.QuantityProducts).all()

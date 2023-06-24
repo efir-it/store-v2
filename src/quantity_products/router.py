@@ -12,7 +12,7 @@ router = APIRouter()
 
 @router.get("/", response_model=List[QuantityProducts])
 def get(db: Session = Depends(get_db_session)):
-    quantity_products = QuantityProducts(db).get_quantity_product_all()
+    quantity_products = QuantityProductsService(db).get_quantity_product_all()
     return quantity_products
 
 
