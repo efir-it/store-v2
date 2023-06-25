@@ -1,51 +1,62 @@
-import asyncio
-from typing import AsyncGenerator
 
+from unittest.mock import MagicMock
+import sqlite3
 import pytest
-from fastapi.testclient import TestClient
-from httpx import AsyncClient
-from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
+
+
+from ..src.quantity_products.model import QuantityProducts
+from ..src.quantity_products.service import QuantityProductsService
+from ..src.store.model import Store
+from ..src.store.services import StoreService
+from sqlalchemy import create_engine
+from sqlalchemy.ext.declarative import DeclarativeMeta, declarative_base
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy.pool import NullPool
 
-from database import get_async_session
-from src import metadata
-from src.config import (DB_HOST_TEST, DB_NAME_TEST, DB_PASS_TEST, DB_PORT_TEST,
-                        DB_USER_TEST)
-from src.main import app
+# SQLALCHEMY_DATABASE_URL = "postgresql://postgres:542525Zz@localhost:5432/store_test"
+SQLALCHEMY_DATABASE_URL = "sqlite:///test.db"
 
-# DATABASE
-DATABASE_URL_TEST = f"postgresql+asyncpg://{DB_USER_TEST}:{DB_PASS_TEST}@{DB_HOST_TEST}:{DB_PORT_TEST}/{DB_NAME_TEST}"
+engine_test = create_engine(SQLALCHEMY_DATABASE_URL)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine_test, extend_existing=True)
 
-engine_test = create_async_engine(DATABASE_URL_TEST, poolclass=NullPool)
-async_session_maker = sessionmaker(engine_test, class_=AsyncSession, expire_on_commit=False)
-metadata.bind = engine_test
 
-async def override_get_async_session() -> AsyncGenerator[AsyncSession, None]:
-    async with async_session_maker() as session:
-        yield session
 
-app.dependency_overrides[get_async_session] = override_get_async_session
+def get_db_test_session():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
-@pytest.fixture(autouse=True, scope='session')
-async def prepare_database():
-    async with engine_test.begin() as conn:
-        await conn.run_sync(metadata.create_all)
-    yield
-    async with engine_test.begin() as conn:
-        await conn.run_sync(metadata.drop_all)
 
-# SETUP
-@pytest.fixture(scope='session')
-def event_loop(request):
-    """Create an instance of the default event loop for each test case."""
-    loop = asyncio.get_event_loop_policy().new_event_loop()
-    yield loop
-    loop.close()
+@pytest.fixture
+def store():
+    service = StoreService
 
-client = TestClient(app)
+    store_1 = Store(id=1, name='Магазин Бавария', address="Ворошилова 32", separated=True)
+    store_2 = Store(id=2, name='Магазин Бавария', address="Конституции 1/1", separated=True)
+    store_3 = Store(id=3, name='Магазин Бавария', address="Победы 159", separated=True)
 
-@pytest.fixture(scope="session")
-async def ac() -> AsyncGenerator[AsyncClient, None]:
-    async with AsyncClient(app=app, base_url="http://test") as ac:
-        yield ac
+    service.get_store_one = MagicMock(return_value=store_1)
+    service.get_store_all = MagicMock(return_value=[store_1, store_2, store_3])
+    service.store_update = MagicMock(return_value={"updated_rows": 1, "id": "2", "answer": "updated"})
+    service.store_create = MagicMock(return_value=store_2)
+    service.store_delete = MagicMock(return_value={'answer': 'success'})
+
+    return service
+
+
+@pytest.fixture
+def store():
+    service = QuantityProductsService
+
+    quantity_product_1 = QuantityProducts(id=1, product="Темное пиво", store_id=1, count=5)
+    quantity_product_2 = QuantityProducts(id=2, product="Светлое пиво", store_id=1, count=15)
+    quantity_product_3 = QuantityProducts(id=3, product="Чипсы", store_id=1, count=50)
+
+    service.get_quantity_product_one = MagicMock(return_value=quantity_product_1)
+    service.get_quantity_product_all = MagicMock(return_value=[quantity_product_1, quantity_product_2, quantity_product_3])
+    service.quantity_product_update = MagicMock(return_value={"updated_rows": 1, "id": "2", "answer": "updated"})
+    service.quantity_product_create = MagicMock(return_value=quantity_product_2)
+    service.quantity_product_delete = MagicMock(return_value={'answer': 'success'})
+
+    return service

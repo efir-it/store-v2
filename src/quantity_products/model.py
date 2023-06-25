@@ -13,4 +13,4 @@ class QuantityProducts(Base):
 
     store = relationship("Store", back_populates="quantity_products")
 
-
+# QuantityProducts.__table__.create(bind=engine)

@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, Boolean
 from sqlalchemy.orm import relationship
 
-from core.database import Base
+from core.database import Base, engine
 
 
 class Store(Base):
@@ -14,3 +14,5 @@ class Store(Base):
 
     quantity_products = relationship("QuantityProducts", back_populates="store")
 
+
+# Store.__table__.create(bind=engine, checkfirst=True, extend_existing=True)
